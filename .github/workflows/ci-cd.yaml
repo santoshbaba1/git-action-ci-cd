@@ -29,6 +29,11 @@ jobs:
       - name: Run Tests
         run: |
           pytest
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.STAGING_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
 
   deploy-staging:
     needs: build-test
