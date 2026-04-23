@@ -1,0 +1,65 @@
+name: Flask CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, staging]
+  pull_request:
+    branches: [main, staging]
+  release:
+    types: [created]
+
+jobs:
+
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run Tests
+        run: |
+          pytest
+
+  deploy-staging:
+    needs: build-test
+    if: github.ref == 'refs/heads/staging'
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Staging Server
+        run: |
+          echo "Deploying to STAGING..."
+          ssh -o StrictHostKeyChecking=no ${{ secrets.STAGING_USER }}@${{ secrets.STAGING_HOST }} "
+            cd flask-app &&
+            git pull origin staging &&
+            docker compose down &&
+            docker compose up -d --build
+          "
+
+  deploy-production:
+    needs: build-test
+    if: github.event_name == 'release'
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Production Server
+        run: |
+          echo "Deploying to PRODUCTION..."
+          ssh -o StrictHostKeyChecking=no ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "
+            cd flask-app &&
+            git pull origin main &&
+            docker compose down &&
+            docker compose up -d --build
+          "
