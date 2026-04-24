@@ -8,7 +8,7 @@ def home():
 
 @app.route('/welcome')
 def welcome():
-    return "Hello! Let us learn CI/CD together and become experts in it. Welcome to the Hero-Vired CI/CD Year-2026 course!"
+    return "Hello! Let us learn CI/CD together and become experts in it. Welcome to the Hero-Vired DevOps Course Year-2026!"
 
 
 if __name__ == "__main__":
