@@ -42,15 +42,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-       - name: Deploy to Staging
-         run: |
-          echo "Deploying to STAGING..."
-          ssh -i ~/.ssh/id_ed25519 ${{ secrets.STAGING_USER }}@${{ secrets.STAGING_HOST }} "
-          cd flask-app &&
-          git pull origin staging &&
-          docker compose down &&
-          docker compose up -d --build
-          "
+      - name: Deploy to Staging
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.STAGING_HOST }}
+          username: ${{ secrets.STAGING_USER }}
+          key: ${{ secrets.STAGING_SSH_KEY }}
+          script: |
+            cd flask-app
+            git pull origin staging
+            docker compose down
+            docker compose up -d --build
+        #  run: |
+        #   echo "Deploying to STAGING..."
+        #   ssh -i ~/.ssh/id_ed25519 ${{ secrets.STAGING_USER }}@${{ secrets.STAGING_HOST }} "
+        #   cd flask-app &&
+        #   git pull origin staging &&
+        #   docker compose down &&
+        #   docker compose up -d --build
+        #   "
       # - name: Deploy to Staging via SSH
       #   uses: appleboy/ssh-action@v1.0.3
       #   with:
