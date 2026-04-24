@@ -223,9 +223,11 @@ sudo apt install docker.io docker-compose -y
 
 ---
 
-## 👨‍💻 Author
+👨‍💻 Author
 
-**Santhosh Sharma**
+Santosh Kumar Sharma (12394), Batch-15
+
+DevOps & Cloud Enthusiast
 
 ---
 
