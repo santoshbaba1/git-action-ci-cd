@@ -8,8 +8,14 @@ on:
   release:
     types: [created]
 
+env:
+  IMAGE_NAME: flask-app
+
 jobs:
 
+# -------------------------
+# 1. BUILD & TEST
+# -------------------------
   build-test:
     runs-on: ubuntu-latest
 
@@ -25,41 +31,100 @@ jobs:
       - name: Install Dependencies
         run: |
           pip install -r requirements.txt
+          pip install pytest
 
       - name: Run Tests
-        run: |
-          pytest
+        run: pytest -v
 
+# -------------------------
+# 2. BUILD DOCKER IMAGE
+# -------------------------
+  build-image:
+    needs: build-test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        run: |
+          docker build -t $IMAGE_NAME:${{ github.sha }} .
+
+      - name: Save Image
+        run: |
+          docker save $IMAGE_NAME:${{ github.sha }} > image.tar
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: image.tar
+
+# -------------------------
+# 3. DEPLOY TO STAGING
+# -------------------------
   deploy-staging:
-    needs: build-test
+    needs: build-image
     if: github.ref == 'refs/heads/staging'
-
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to Staging Server
-        run: |
-          echo "Deploying to STAGING..."
-          ssh -o StrictHostKeyChecking=no ${{ secrets.STAGING_USER }}@${{ secrets.STAGING_HOST }} "
-            cd flask-app &&
-            git pull origin staging &&
-            docker compose down &&
-            docker compose up -d --build
-          "
+      - name: Download Image
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
 
+      - name: Deploy to Staging
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.STAGING_HOST }}
+          username: ${{ secrets.STAGING_USER }}
+          key: ${{ secrets.STAGING_SSH_KEY }}
+          script: |
+            echo "🚀 Deploying to STAGING..."
+
+            docker load < image.tar
+
+            docker stop flask-app || true
+            docker rm flask-app || true
+
+            docker run -d -p 5000:5000 \
+              --name flask-app \
+              $IMAGE_NAME:${{ github.sha }}
+
+            echo "✅ STAGING DEPLOYED"
+
+# -------------------------
+# 4. DEPLOY TO PRODUCTION
+# -------------------------
   deploy-production:
-    needs: build-test
+    needs: build-image
     if: github.event_name == 'release'
-
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to Production Server
-        run: |
-          echo "Deploying to PRODUCTION..."
-          ssh -o StrictHostKeyChecking=no ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} "
-            cd flask-app &&
-            git pull origin main &&
-            docker compose down &&
-            docker compose up -d --build
-          "
+      - name: Download Image
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+
+      - name: Deploy to Production
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.PROD_HOST }}
+          username: ${{ secrets.PROD_USER }}
+          key: ${{ secrets.PROD_SSH_KEY }}
+          script: |
+            echo "🚀 Deploying to PRODUCTION..."
+
+            docker load < image.tar
+
+            docker stop flask-app || true
+            docker rm flask-app || true
+
+            docker run -d -p 5000:5000 \
+              --name flask-app \
+              $IMAGE_NAME:${{ github.sha }}
+
+            echo "✅ PRODUCTION DEPLOYED"
