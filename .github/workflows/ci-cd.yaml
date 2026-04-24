@@ -100,7 +100,7 @@ jobs:
 # -------------------------
   deploy-production:
     needs: build-image
-    if: github.event_name == 'release'
+    if: github.ref == 'refs/heads/main' # if: github.event_name == 'release'
     runs-on: ubuntu-latest
 
     steps:
