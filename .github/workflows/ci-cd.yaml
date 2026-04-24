@@ -34,16 +34,16 @@ jobs:
       #     mkdir -p ~/.ssh
       #     echo "${{ secrets.STAGING_SSH_KEY }}" > ~/.ssh/id_rsa
       #     chmod 600 ~/.ssh/id_rsa
-      - name: Debug SSH Connection
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.STAGING_HOST }}
-          username: ubuntu
-          key: ${{ secrets.STAGING_SSH_KEY }}
-          script: |
-            echo "✅ Connected successfully"
-            whoami
-            pwd
+      # - name: Debug SSH Connection
+      #   uses: appleboy/ssh-action@v1.0.3
+      #   with:
+      #     host: ${{ secrets.STAGING_HOST }}
+      #     username: ubuntu
+      #     key: ${{ secrets.STAGING_SSH_KEY }}
+      #     script: |
+      #       echo "✅ Connected successfully"
+      #       whoami
+      #       pwd
   deploy-staging:
     needs: build-test
     # if: github.ref == 'refs/heads/staging'
