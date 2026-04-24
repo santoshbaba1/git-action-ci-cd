@@ -42,29 +42,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to Staging via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.STAGING_HOST }}
-          username: ${{ secrets.STAGING_USER }}
-          key: ${{ secrets.STAGING_SSH_KEY }}
-          port: 22
-          script: |
-            echo "🚀 Deploying to STAGING..."
+       - name: Deploy to Staging
+         run: |
+          echo "Deploying to STAGING..."
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.STAGING_USER }}@${{ secrets.STAGING_HOST }} "
+          cd flask-app &&
+          git pull origin staging &&
+          docker compose down &&
+          docker compose up -d --build
+          "
+      # - name: Deploy to Staging via SSH
+      #   uses: appleboy/ssh-action@v1.0.3
+      #   with:
+      #     host: ${{ secrets.STAGING_HOST }}
+      #     username: ${{ secrets.STAGING_USER }}
+      #     key: ${{ secrets.STAGING_SSH_KEY }}
+      #     port: 22
+      #     script: |
+      #       echo "🚀 Deploying to STAGING..."
 
-            cd ~/flask-app || exit 1
+      #       cd ~/flask-app || exit 1
 
-            echo "📥 Pull latest code"
-            git pull origin staging
+      #       echo "📥 Pull latest code"
+      #       git pull origin staging
 
-            echo "🛑 Stop old containers"
-            docker compose down
+      #       echo "🛑 Stop old containers"
+      #       docker compose down
 
-            echo "🔨 Build new containers"
-            docker compose up -d --build
+      #       echo "🔨 Build new containers"
+      #       docker compose up -d --build
 
-            echo "🧹 Cleanup"
-            docker image prune -f
+      #       echo "🧹 Cleanup"
+      #       docker image prune -f
 
 # -------------------------
 # 3. DEPLOY TO PRODUCTION
