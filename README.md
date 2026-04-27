@@ -287,6 +287,3 @@ Santosh Kumar Sharma (12394), Batch-15
 
 DevOps & Cloud Enthusiast
 
----
-
-This project is for educational purposes.
