@@ -111,7 +111,7 @@ Add the following secrets:
 ###  Staging
 
 ```
-STAGING_HOST=<your-server-ip>
+STAGING_HOST=13.201.9.73
 STAGING_USER=ubuntu
 STAGING_SSH_KEY=<private-ssh-key>
 ```
@@ -119,7 +119,7 @@ STAGING_SSH_KEY=<private-ssh-key>
 ###  Production
 
 ```
-PROD_HOST=<your-server-ip>
+PROD_HOST=3.110.187.241
 PROD_USER=ubuntu
 PROD_SSH_KEY=<private-ssh-key>
 ```
