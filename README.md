@@ -1,132 +1,149 @@
-# # Flask CI/CD Pipeline using GitHub Actions
+#  Flask CI/CD Pipeline using GitHub Actions
 
-##  Project Overview
+## Objective
 
-This project demonstrates a complete **CI/CD pipeline** for a Flask application using **GitHub Actions**.
+This project demonstrates how to implement a complete **CI/CD pipeline** for a Python Flask application using GitHub Actions.
 
 The pipeline automates:
 
-*  Code build and testing
-*  Docker image creation
-*  Deployment to Staging environment
-*  Deployment to Production environment
+* Build & dependency installation
+* Automated testing using pytest
+* Application packaging (Docker)
+* Deployment to Staging environment
+* Deployment to Production environment
 
 ---
 
-##  Tech Stack
+##  Sample Application Repository
 
-* Python 3.12
-* Flask
-* Pytest
-* Docker
-* GitHub Actions (CI/CD)
+This project is based on a Flask application. You can use:
+
+* https://github.com/pallets/flask/tree/main/examples/tutorial
+
+<img width="1348" height="759" alt="git action-2 merge" src="https://github.com/user-attachments/assets/dc635f1c-bc72-455b-94bc-bce844ef6ce2" />
 
 ---
 
 ##  Branch Strategy
 
-| Branch    | Purpose                |
-| --------- | ---------------------- |
-| `main`    | Production-ready code  |
-| `staging` | Pre-production testing |
+| Branch    | Purpose                  |
+| --------- | ------------------------ |
+| `main`    | Production environment   |
+| `staging` | Pre-production / testing |
+
+
+
+  - <img width="1303" height="672" alt="ec2" src="https://github.com/user-attachments/assets/3054bdf4-dd7e-43df-aff9-5f80df9bf2f2" />
 
 ---
 
-##  CI/CD Workflow
+## ⚙️ GitHub Actions Workflow
 
-<img width="1536" height="1024" alt="ChatGPT Image Apr 24, 2026, 01_53_30 PM" src="https://github.com/user-attachments/assets/0f3034bc-abac-4c7e-be20-ed2c38726e6b" />
+The workflow is defined in:
 
-
-The pipeline is defined in:
-
-```
+```bash
 .github/workflows/ci-cd.yml
 ```
 
 ---
 
-##  Pipeline Flow
-
-###  Build & Test
-
-* Install dependencies
-* Run test cases using `pytest`
+## 🔄 CI/CD Pipeline Flow
+  - <img width="1536" height="1024" alt="ChatGPT Image Apr 24, 2026, 01_53_30 PM" src="https://github.com/user-attachments/assets/4ae6851e-7708-4e97-bfa8-c25bf40ec9f2" />
+### 1️⃣ Install Dependencies
 
 ```bash
 pip install -r requirements.txt
+```
+
+---
+
+### Run Tests
+
+```bash
 pytest -v
 ```
 
----
-
-###  Build Docker Image
-
-* Build Docker image using commit SHA
-* Store image as artifact
+✔<img width="1348" height="759" alt="git action-2 merge" src="https://github.com/user-attachments/assets/e55b2232-8f9a-47b7-aa2e-a56b7691fba0" />
+ Ensures code quality before deployment
 
 ---
 
-###  Deploy to Staging
+### Build Application
 
-Triggered when code is pushed to:
-
-```
-staging branch
-```
-
-Steps:
-
-* Connect to staging server via SSH
-* Pull latest code / load Docker image
-* Stop old container
-* Start new container
+* Docker image is created after successful tests
+* Image is tagged using commit SHA
 
 ---
 
-###  Deploy to Production
+### Deploy to Staging
 
 Triggered when:
 
-```
-GitHub Release is created
+```text
+Code is pushed to staging branch
 ```
 
 Steps:
 
-* Connect to production server
-* Deploy latest stable version
+* SSH into staging server
+* Pull latest code / load Docker image
+* Restart application container
+
+<img width="674" height="726" alt="staging-key" src="https://github.com/user-attachments/assets/fd13c61c-4d9c-4e62-92b3-46d4cdf9a671" />
 
 ---
 
-##  GitHub Secrets Configuration
+### Deploy to Production
 
-Go to:
+Triggered when:
 
-```
-GitHub Repo → Settings → Secrets → Actions
-```
-
-Add the following secrets:
-
-###  Staging
-
-```
-STAGING_HOST=13.201.9.73
-STAGING_USER=ubuntu
-STAGING_SSH_KEY=<private-ssh-key>
+```text
+A GitHub Release is created
 ```
 
-###  Production
+Steps:
 
-```
-PROD_HOST=3.110.187.241
-PROD_USER=ubuntu
-PROD_SSH_KEY=<private-ssh-key>
-```
+* SSH into production server
+* Deploy stable version of application
+
+<img width="432" height="715" alt="pro-key" src="https://github.com/user-attachments/assets/39da5b8a-da8c-479d-993a-6b9e917a74aa" />
 
 ---
 
-##  SSH Setup (Important)
+## Environment Secrets
+
+Secrets are configured in:
+
+```text
+GitHub → Settings → Secrets → Actions
+```
+
+<img width="1313" height="672" alt="git env" src="https://github.com/user-attachments/assets/afdf68b5-aa5a-4651-a5cc-a1981517275c" />
+
+### 🔸 Staging Secrets
+
+```text
+STAGING_HOST = 13.201.9.73
+STAGING_USER = ubuntu
+STAGING_SSH_KEY = <private-ssh-key>
+```
+  - <img width="1362" height="386" alt="stging" src="https://github.com/user-attachments/assets/235a8ad4-47b8-4619-be27-e59831a77dac" />
+
+---
+
+### 🔸 Production Secrets
+
+```text
+PROD_HOST = 3.110.187.241
+PROD_USER = ubuntu
+PROD_SSH_KEY = <private-ssh-key>
+```
+
+  - <img width="1361" height="422" alt="prod" src="https://github.com/user-attachments/assets/a81cbeb6-ee70-4a52-b1fd-abcb416ea338" />
+
+---
+
+## SSH Setup (Important)
 
 1. Generate SSH key:
 
@@ -144,13 +161,22 @@ ssh-copy-id -i ~/.ssh/id_ed25519.pub ubuntu@server-ip
 
 ---
 
-##  Docker Setup
+## Docker Setup
+<img width="1362" height="386" alt="stging" src="https://github.com/user-attachments/assets/77fb107e-8f20-4649-b804-17888e5a85cb" />
+<img width="1365" height="767" alt="stage-flask-1" src="https://github.com/user-attachments/assets/110e2e5a-7798-477e-b2ee-cac6a5a8ad19" />
 
-### Build Image Locally
+
+
+
+### Build Image
 
 ```bash
 docker build -t flask-app .
 ```
+
+<img width="1365" height="767" alt="stage-flask-1" src="https://github.com/user-attachments/assets/b04f86e5-ad11-4f5e-9d22-e34714c0c54e" />
+
+---
 
 ### Run Container
 
@@ -160,17 +186,17 @@ docker run -d -p 5000:5000 flask-app
 
 ---
 
-##  Access Application
+## Access Application
 
 After deployment:
 
-```
+```text
 http://<server-ip>:5000
 ```
 
 ---
 
-##  Running Tests Locally
+## Running Tests Locally
 
 ```bash
 pip install -r requirements.txt
@@ -179,26 +205,26 @@ pytest -v
 
 ---
 
-## 📸 Screenshots (Submission)
+## 📸 Screenshots (Submission Requirement)
 
-Include the following:
+Include the following screenshots:
 
 * ✅ GitHub Actions pipeline success
-* ✅ Build & test logs
+* ✅ Build and test logs
 * ✅ Staging deployment logs
 * ✅ Production deployment logs
 * ✅ Application running in browser
 
 ---
 
-##  Troubleshooting
+## Troubleshooting
 
 ### SSH Error: Permission denied (publickey)
 
-Fix:
+Solution:
 
 * Ensure correct private key in GitHub Secrets
-* Ensure public key is in server `~/.ssh/authorized_keys`
+* Ensure public key is added to `~/.ssh/authorized_keys` on server
 * Check permissions:
 
 ```bash
@@ -208,80 +234,24 @@ chmod 600 ~/.ssh/authorized_keys
 
 ---
 
-###  Docker not found
+###  Pipeline Not Triggering
 
-```bash
-sudo apt install docker.io docker-compose -y
-```
+* Verify branch name (`staging` or `main`)
+* Check workflow conditions in YAML
 
 ---
 
 ##  Future Improvements
 
-* Add HTTPS with Nginx
-* Implement Zero-Downtime Deployment
-* Add Monitoring & Logging
-* Use Docker Hub for image storage
+* Add HTTPS using Nginx
+* Implement Zero Downtime Deployment
+* Integrate Docker Hub
+* Add monitoring and logging
 * Kubernetes deployment
 
 ---
-Core Learning Outcomes from This Project
-🔹 1. End-to-End CI/CD Pipeline Design
 
-You didn’t just write code—you automated the lifecycle:
-
-Code → Build → Test → Package → Deploy → Run
-
-What you learned:
-
-How pipelines are triggered (push, PR, release)
-How to chain jobs using needs
-How to prevent bad code from reaching production
-
-## “Implemented a gated CI/CD pipeline where deployment only happens after successful automated testing.”
-
-🔹 2. Real Git Workflow (Not Just Basics)
-
-You used a branch-based deployment strategy:
-
-staging → pre-production testing
-main → production
-
-What you learned:
-
-Environment separation
-Controlled releases using tags
-Safe deployment practices
-
-## "Used branch-based deployment where staging validates changes before promoting to production via release tagging.”
-
-🔹 3. GitHub Actions Deep Understanding
-
-You didn’t just use it—you debugged it (which is the real skill).
-
-What you learned:
-
-Writing workflows in YAML
-Using reusable actions like appleboy/ssh-action
-Debugging failures (SSH, conditions, secrets)
-Managing job dependencies
-
-## This is what most candidates struggle with
-
-🔹 4. Secure Deployment (SSH + Secrets)
-
-This is real DevOps work, not beginner level.
-
-What I learned:
-
-SSH key-based authentication
-Difference between public vs private keys
-Storing secrets securely in GitHub
-Why Permission denied (publickey) happens
-
----
-
-👨‍💻 Author
+Author
 
 Santosh Kumar Sharma (12394), Batch-15
 
