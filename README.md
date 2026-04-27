@@ -178,14 +178,6 @@ docker build -t flask-app .
 
 ---
 
-### Run Container
-
-```bash
-docker run -d -p 5000:5000 flask-app
-```
-
----
-
 ## Access Application
 
 After deployment:
@@ -193,29 +185,21 @@ After deployment:
 ```text
 http://<server-ip>:5000
 ```
-
+  - <img width="1358" height="281" alt="svr run status" src="https://github.com/user-attachments/assets/c346503f-fb88-4bf5-97e9-acc13f10afe6" />
 ---
 
 ## Running Tests Locally
+
+
+  -<img width="1317" height="198" alt="pro svr 1" src="https://github.com/user-attachments/assets/1c7e6337-4ba9-4e50-afce-e3d52c4be3b1" />
+  -<img width="1318" height="631" alt="stag svr" src="https://github.com/user-attachments/assets/1c025f69-f9af-4f64-896f-210919ce2991" />
+  -<img width="1314" height="629" alt="pro svr" src="https://github.com/user-attachments/assets/855c05c2-d12f-4498-8730-a0590247fa85" />
+
 
 ```bash
 pip install -r requirements.txt
 pytest -v
 ```
-
----
-
-## 📸 Screenshots (Submission Requirement)
-
-Include the following screenshots:
-
-* ✅ GitHub Actions pipeline success
-* ✅ Build and test logs
-* ✅ Staging deployment logs
-* ✅ Production deployment logs
-* ✅ Application running in browser
-
----
 
 ## Troubleshooting
 
@@ -234,10 +218,13 @@ chmod 600 ~/.ssh/authorized_keys
 
 ---
 
-###  Pipeline Not Triggering
+###  Pipeline Triggering
 
 * Verify branch name (`staging` or `main`)
 * Check workflow conditions in YAML
+  -<img width="1358" height="723" alt="git act 1" src="https://github.com/user-attachments/assets/218bb7a5-44fe-4532-a4bf-6ccb3af29563" />
+  -<img width="1357" height="767" alt="git action-1" src="https://github.com/user-attachments/assets/9ce5b7d3-8b5f-4c3e-bcdd-1557bb9ecb3c" />
+  -<img width="1358" height="720" alt="git act 2" src="https://github.com/user-attachments/assets/f4cf6ce9-f73f-44f2-a00b-9fc00e069681" />
 
 ---
 
