@@ -160,7 +160,8 @@ ssh-copy-id -i ~/.ssh/id_ed25519.pub ubuntu@server-ip
 
 ---
 
-<img width="1365" height="767" alt="stage-flask-1" src="https://github.com/user-attachments/assets/b04f86e5-ad11-4f5e-9d22-e34714c0c54e" />
+<img width="1326" height="721" alt="ssh key" src="https://github.com/user-attachments/assets/452abafb-0156-417b-a8fc-51f24c001b7b" />
+
 
 ---
 
