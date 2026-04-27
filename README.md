@@ -16,11 +16,10 @@ The pipeline automates:
 
 ##  Sample Application Repository
 
-This project is based on a Flask application. You can use:
+This project is based on a Flask application.
+* https://github.com/santoshbaba1/git-action-ci-cd.git
 
-* https://github.com/pallets/flask/tree/main/examples/tutorial
-
-<img width="1348" height="759" alt="git action-2 merge" src="https://github.com/user-attachments/assets/dc635f1c-bc72-455b-94bc-bce844ef6ce2" />
+  -<img width="1348" height="759" alt="git action-2 merge" src="https://github.com/user-attachments/assets/dc635f1c-bc72-455b-94bc-bce844ef6ce2" />
 
 ---
 
@@ -37,7 +36,7 @@ This project is based on a Flask application. You can use:
 
 ---
 
-## ⚙️ GitHub Actions Workflow
+## GitHub Actions Workflow
 
 The workflow is defined in:
 
