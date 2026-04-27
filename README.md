@@ -160,19 +160,6 @@ ssh-copy-id -i ~/.ssh/id_ed25519.pub ubuntu@server-ip
 
 ---
 
-## Docker Setup
-<img width="1362" height="386" alt="stging" src="https://github.com/user-attachments/assets/77fb107e-8f20-4649-b804-17888e5a85cb" />
-<img width="1365" height="767" alt="stage-flask-1" src="https://github.com/user-attachments/assets/110e2e5a-7798-477e-b2ee-cac6a5a8ad19" />
-
-
-
-
-### Build Image
-
-```bash
-docker build -t flask-app .
-```
-
 <img width="1365" height="767" alt="stage-flask-1" src="https://github.com/user-attachments/assets/b04f86e5-ad11-4f5e-9d22-e34714c0c54e" />
 
 ---
